@@ -1,3 +1,4 @@
+#include "cooper_object.h"
 #include <stdio.h>
 
 int main(void) {

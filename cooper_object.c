@@ -74,6 +74,9 @@ void *insert_cooper_object(struct cooper_object *obj, char *name, void *value) {
     int index = generate_hash_value(name) % obj->size;
     struct cooper_property *tail = obj->table[index];
 
+    if (is_overload_cooper_object(obj))
+        rehash_cooper_object(obj);
+
     if (tail) {
         while (tail->next)
             tail = tail->next;

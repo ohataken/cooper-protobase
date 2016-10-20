@@ -41,6 +41,34 @@ static int next_size(int i) {
     return ((i + 1) << 1) - 1;
 }
 
+static void rehash_cooper_object(struct cooper_object *obj) {
+    int size = next_size(obj->size);
+    struct cooper_property **table = malloc(sizeof(struct cooper_property *) * size);
+
+    for (int i = 0; i < size; ++i) {
+        table[i] = NULL;
+    }
+
+    for (int i = 0; i < obj->size; ++i) {
+        for (struct cooper_property *prop = obj->table[i]; prop; prop = prop->next) {
+            int index = generate_hash_value(prop->name) % size;
+
+            if (table[index]) {
+                struct cooper_property *p = prop;
+                while (p->next)
+                    p = p->next;
+
+                p->next = prop;
+            } else {
+                table[index] = prop;
+            }
+        }
+    }
+
+    obj->size = size;
+    obj->table = table;
+}
+
 void *insert_cooper_object(struct cooper_object *obj, char *name, void *value) {
     struct cooper_property *prop = new_cooper_property(name, value);
     int index = generate_hash_value(name) % obj->size;

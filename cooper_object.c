@@ -48,6 +48,8 @@ void *insert_cooper_object(struct cooper_object *obj, char *name, void *value) {
         obj->table[index] = prop;
     }
 
+    ++obj->count;
+
     return value;
 }
 

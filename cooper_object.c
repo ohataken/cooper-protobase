@@ -33,6 +33,14 @@ static int generate_hash_value(char *name) {
     return tmp;
 }
 
+static int is_overload_cooper_object(struct cooper_object *obj) {
+    return obj->count * 2 < obj->size;
+}
+
+static int next_size(int i) {
+    return ((i + 1) << 1) - 1;
+}
+
 void *insert_cooper_object(struct cooper_object *obj, char *name, void *value) {
     struct cooper_property *prop = new_cooper_property(name, value);
     int index = generate_hash_value(name) % obj->size;
